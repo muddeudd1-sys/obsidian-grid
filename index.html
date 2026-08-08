@@ -24,7 +24,9 @@
           animation: {
             'marquee': 'marquee 25s linear infinite',
             'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
-            'float': 'float 6s ease-in-out infinite',
+            'float-slow': 'floatSlow 7s ease-in-out infinite',
+            'float-reverse': 'floatReverse 8s ease-in-out infinite',
+            'spin-slow': 'spin 20s linear infinite',
           },
           keyframes: {
             marquee: {
@@ -35,9 +37,13 @@
               '0%, 100%': { opacity: '0.4', filter: 'drop-shadow(0 0 15px rgba(168,85,247,0.4))' },
               '50%': { opacity: '0.8', filter: 'drop-shadow(0 0 30px rgba(168,85,247,0.8))' },
             },
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-10px)' },
+            floatSlow: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-18px) rotate(5deg)' },
+            },
+            floatReverse: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(18px) rotate(-5deg)' },
             }
           }
         }
@@ -60,8 +66,8 @@
 
     .cyber-card {
       position: relative;
-      background: rgba(13, 15, 23, 0.7);
-      backdrop-filter: blur(12px);
+      background: rgba(13, 15, 23, 0.75);
+      backdrop-filter: blur(14px);
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -71,7 +77,7 @@
       inset: 0;
       border-radius: inherit;
       padding: 1px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 60%, rgba(168,85,247,0.3));
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent 60%, rgba(168,85,247,0.35));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
@@ -80,11 +86,11 @@
 
     .cyber-card:hover {
       transform: translateY(-6px) scale(1.01);
-      box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.3);
+      box-shadow: 0 12px 35px -10px rgba(168, 85, 247, 0.35);
     }
 
     .cyber-card:hover::before {
-      background: linear-gradient(135deg, rgba(168,85,247,0.8), transparent 40%, rgba(16,185,129,0.8));
+      background: linear-gradient(135deg, rgba(168,85,247,0.85), transparent 40%, rgba(16,185,129,0.85));
     }
 
     .reveal {
@@ -98,20 +104,55 @@
       transform: translateY(0);
     }
 
+    /* Ambient Lighting */
+    .glow-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      opacity: 0.25;
+    }
+
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #050608; }
     ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #a855f7; }
   </style>
-  <meta name="description" content="Obsidian Grid - Citadel for Gaming Vanguard. High-speed gaming portal and community signal grid.">
-<meta property="og:title" content="OBSIDIAN // GRID">
-<meta property="og:description" content="A cultural citadel for the gaming vanguard.">
-<meta property="og:type" content="website">
 </head>
 <body class="grid-pattern min-h-screen font-sans antialiased selection:bg-purple-500 selection:text-white relative">
 
-  <!-- BACKGROUND CANVAS -->
-  <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+  <!-- BACKGROUND CANVAS & AMBIENT GLOW ORBS -->
+  <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-50"></canvas>
+  
+  <div class="glow-blob w-96 h-96 bg-purple-600 top-10 left-10 z-0"></div>
+  <div class="glow-blob w-96 h-96 bg-emerald-500 top-1/2 right-10 z-0"></div>
+  <div class="glow-blob w-[500px] h-[500px] bg-indigo-600 bottom-10 left-1/3 z-0"></div>
+
+  <!-- FLOATING GAMING ICONS BACKGROUND DECORATION -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-20">
+    <!-- Gamepad Icon -->
+    <svg class="absolute top-1/4 left-10 w-20 h-20 text-purple-400 animate-float-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 10V7a2 2 0 00-2-2H5z"></path>
+      <circle cx="8" cy="10" r="1" fill="currentColor"/>
+      <circle cx="16" cy="10" r="1" fill="currentColor"/>
+    </svg>
+
+    <!-- Crosshair Target Icon -->
+    <svg class="absolute top-1/3 right-16 w-28 h-28 text-emerald-400 animate-float-reverse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" stroke-width="1"></circle>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M12 3v3m0 12v3M3 12h3m12 0h3"></path>
+    </svg>
+
+    <!-- Cyber Shield / Trophy Icon -->
+    <svg class="absolute bottom-1/4 left-1/4 w-24 h-24 text-indigo-400 animate-float-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+    </svg>
+
+    <!-- Gaming Controller Dual-Sense SVG -->
+    <svg class="absolute bottom-10 right-1/3 w-28 h-28 text-purple-500 animate-float-reverse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M6 11h4m-2-2v4m10-3.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm-2 3.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM7 19l2-8h6l2 8M5 13a7 7 0 0114 0"></path>
+    </svg>
+  </div>
 
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
@@ -120,13 +161,16 @@
   <nav class="sticky top-0 z-40 backdrop-blur-xl bg-black/70 border-b border-slate-800/80 px-6 py-4 flex justify-between items-center">
     <div class="flex items-center gap-3 group cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
       <div class="w-3 h-3 bg-purple-500 rounded-full animate-ping"></div>
-      <span class="font-mono font-bold tracking-widest text-lg text-white group-hover:text-purple-400 transition">
+      <span class="font-mono font-bold tracking-widest text-lg text-white group-hover:text-purple-400 transition flex items-center gap-2">
+        <!-- Dynamic Gamepad Logo Icon -->
+        <svg class="w-5 h-5 text-purple-500 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 10V7a2 2 0 00-2-2H5z"></path></svg>
         OBSIDIAN<span class="text-purple-500">/</span>GRID
       </span>
     </div>
     
     <div class="hidden md:flex gap-8 font-mono text-xs tracking-wider text-slate-400">
       <button onclick="scrollToSection('armory')" class="hover:text-purple-400 transition">NexusArmory</button>
+      <button onclick="scrollToSection('hardware-widget')" class="hover:text-purple-400 transition">Hardware</button>
       <button onclick="scrollToSection('command')" class="hover:text-purple-400 transition">Command</button>
       <button onclick="scrollToSection('grid')" class="hover:text-purple-400 transition">Grid</button>
       <button onclick="scrollToSection('status')" class="hover:text-purple-400 transition">Status</button>
@@ -156,9 +200,10 @@
 
   <!-- HERO SECTION -->
   <section class="relative px-6 py-24 max-w-7xl mx-auto flex flex-col items-start justify-center min-h-[75vh] z-10">
-    <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-mono mb-6 tracking-widest uppercase rounded-full animate-bounce">
-      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-      SIGNAL // ACQUIRED
+    <!-- Animated Gaming Badge -->
+    <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-mono mb-6 tracking-widest uppercase rounded-full animate-bounce">
+      <svg class="w-4 h-4 text-emerald-400 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+      <span>SIGNAL // ACQUIRED</span>
     </div>
     
     <h1 class="text-6xl sm:text-8xl md:text-9xl font-black tracking-tighter text-white uppercase mb-6 leading-none select-none">
@@ -173,17 +218,49 @@
     </p>
 
     <div class="flex flex-wrap gap-5 font-mono text-xs tracking-wider reveal">
-      <button onclick="scrollToSection('armory')" class="relative group overflow-hidden px-8 py-4 bg-purple-600 text-white font-bold transition-all duration-300 rounded shadow-lg shadow-purple-600/30 hover:scale-105">
-        <span class="relative z-10">ENTER THE ARMORY</span>
+      <button onclick="scrollToSection('armory')" class="relative group overflow-hidden px-8 py-4 bg-purple-600 text-white font-bold transition-all duration-300 rounded shadow-lg shadow-purple-600/30 hover:scale-105 flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        <span>ENTER THE ARMORY</span>
       </button>
       <button onclick="scrollToSection('command')" class="px-8 py-4 border border-slate-700 bg-slate-900/60 hover:border-purple-500/50 transition-all duration-300 rounded text-slate-300 hover:text-white hover:scale-105 backdrop-blur-md">
         VIEW SPECS
       </button>
     </div>
 
-    <div class="absolute bottom-8 right-8 font-mono text-xs text-slate-500 flex items-center gap-2 animate-float">
+    <div class="absolute bottom-8 right-8 font-mono text-xs text-slate-500 flex items-center gap-2 animate-float-slow">
       <span>Scroll</span>
       <span class="text-purple-400 text-sm">↓</span>
+    </div>
+  </section>
+
+  <!-- DYNAMIC HARDWARE MONITOR WIDGET -->
+  <section id="hardware-widget" class="px-6 py-8 max-w-7xl mx-auto relative z-10">
+    <div class="cyber-card p-6 rounded-xl border border-purple-500/30 bg-slate-900/60 reveal">
+      <div class="flex justify-between items-center mb-4">
+        <span class="text-xs font-mono text-purple-400 tracking-widest uppercase flex items-center gap-2">
+          <svg class="w-4 h-4 text-emerald-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+          HARDWARE TELEMETRY // REAL-TIME MONITOR
+        </span>
+        <span class="text-[10px] font-mono text-slate-500">RIG: OBSIDIAN-NODE-01</span>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono">
+        <div class="bg-black/50 p-3 rounded border border-slate-800">
+          <span class="text-[10px] text-slate-500 block">GPU TEMP</span>
+          <span id="metric-temp" class="text-xl font-bold text-emerald-400">54°C</span>
+        </div>
+        <div class="bg-black/50 p-3 rounded border border-slate-800">
+          <span class="text-[10px] text-slate-500 block">VRAM ALLOCATION</span>
+          <span id="metric-vram" class="text-xl font-bold text-purple-400">11.4 / 16 GB</span>
+        </div>
+        <div class="bg-black/50 p-3 rounded border border-slate-800">
+          <span class="text-[10px] text-slate-500 block">CURRENT FPS</span>
+          <span id="metric-fps" class="text-xl font-bold text-white">238 FPS</span>
+        </div>
+        <div class="bg-black/50 p-3 rounded border border-slate-800">
+          <span class="text-[10px] text-slate-500 block">LINK STABILITY</span>
+          <span id="metric-ping" class="text-xl font-bold text-emerald-400">4ms (STABLE)</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -191,9 +268,13 @@
   <section id="armory" class="px-6 py-20 max-w-7xl mx-auto border-t border-slate-800/80 relative z-10">
     <div class="mb-10 reveal flex flex-col md:flex-row justify-between md:items-end gap-6">
       <div>
-        <span class="font-mono text-purple-500 text-xs tracking-widest uppercase">02 // THE ARMORY</span>
+        <span class="font-mono text-purple-500 text-xs tracking-widest uppercase flex items-center gap-2">
+          <!-- Sword / Weapon Icon -->
+          <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path></svg>
+          02 // THE ARMORY
+        </span>
         <h2 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mt-1 uppercase">ACQUIRE FIREPOWER</h2>
-        <p class="text-slate-400 text-sm mt-2 font-light">High-speed filtering. Hover to upscale. Each title is a monument — engineered, tested, and verified at the edge.</p>
+        <p class="text-slate-400 text-sm mt-2 font-light">High-speed filtering. Hover to upscale. Click card to open expanded telemetry view.</p>
       </div>
 
       <!-- SEARCH & FILTER BAR -->
@@ -212,7 +293,7 @@
 
     <!-- GAME CARDS CONTAINER -->
     <div id="games-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-      <!-- Dynamic Games JavaScript dwara load honge -->
+      <!-- Dynamic Games JS -->
     </div>
 
     <!-- METRICS BAND -->
@@ -260,28 +341,41 @@
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
           ALL SYSTEMS NOMINAL
         </div>
-        <h3 class="text-xl font-bold text-white mb-2">Native Silicon</h3>
+        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+          <!-- CPU Icon -->
+          <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+          Native Silicon
+        </h3>
         <p class="text-slate-400 text-sm font-light leading-relaxed">
           Every title compiled and verified against the platform's reference silicon. No translation layers. No overhead.
         </p>
       </div>
 
       <div class="cyber-card p-8 rounded-lg reveal">
-        <h3 class="text-xl font-bold text-white mb-2 mt-4">Inertial Scroll</h3>
+        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+          <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          Inertial Scroll
+        </h3>
         <p class="text-slate-400 text-sm font-light leading-relaxed">
           Weighted, heavy feel. The page doesn't stop — it settles into place with a subtle bounce.
         </p>
       </div>
 
       <div class="cyber-card p-8 rounded-lg reveal">
-        <h3 class="text-xl font-bold text-white mb-2">Anti-Cheat Grid</h3>
+        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+          <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+          Anti-Cheat Grid
+        </h3>
         <p class="text-slate-400 text-sm font-light leading-relaxed">
           Kernel-level integrity monitoring. Verified operators only. A clean citadel.
         </p>
       </div>
 
       <div class="cyber-card p-8 rounded-lg reveal">
-        <h3 class="text-xl font-bold text-white mb-2">Variable Grid</h3>
+        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+          <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          Variable Grid
+        </h3>
         <p class="text-slate-400 text-sm font-light leading-relaxed">
           A 16-column variable-density grid. Columns that breathe, focused on full-bleed imagery.
         </p>
@@ -306,7 +400,7 @@
 
     <!-- FORUM POSTS CONTAINER -->
     <div id="forum-posts" class="space-y-4">
-      <!-- Dynamic Forum Posts JavaScript dwara load honge -->
+      <!-- Dynamic Forum Posts JS -->
     </div>
   </section>
 
@@ -369,6 +463,47 @@
     </div>
   </footer>
 
+  <!-- MODAL: EXPANDED GAME DETAIL VIEW -->
+  <div id="game-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="cyber-card bg-slate-900 border border-purple-500/40 p-8 rounded-xl max-w-2xl w-full relative">
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <span id="modal-game-genre" class="text-xs font-mono text-purple-400">GENRE</span>
+          <h2 id="modal-game-title" class="text-3xl font-extrabold text-white">TITLE</h2>
+        </div>
+        <span id="modal-game-score" class="px-3 py-1 bg-purple-500/20 text-purple-300 font-mono text-sm rounded border border-purple-500/40 font-bold">98</span>
+      </div>
+      <p id="modal-game-desc" class="text-slate-300 text-sm mb-6 font-mono">Game description details...</p>
+      
+      <div class="grid grid-cols-2 gap-4 bg-black/50 p-4 rounded border border-slate-800 mb-6 font-mono text-xs">
+        <div>
+          <span class="text-slate-500 block">TARGET SPECS</span>
+          <span class="text-white font-bold">4K 120 FPS / RAY TRACING</span>
+        </div>
+        <div>
+          <span class="text-slate-500 block">STORAGE REQ</span>
+          <span class="text-white font-bold">85 GB NVMe SSD</span>
+        </div>
+        <div>
+          <span class="text-slate-500 block">AUDIO ENGINE</span>
+          <span class="text-white font-bold">SPATIAL BINAURAL 3D</span>
+        </div>
+        <div>
+          <span class="text-slate-500 block">STATUS</span>
+          <span class="text-emerald-400 font-bold">READY TO DEPLOY</span>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-4 border-t border-slate-800">
+        <span id="modal-game-price" class="text-2xl font-bold font-mono text-white">$0.00</span>
+        <div class="flex gap-3">
+          <button id="close-game-modal" class="px-4 py-2 border border-slate-700 text-slate-400 text-xs font-mono rounded hover:text-white">CLOSE</button>
+          <button id="modal-buy-btn" class="px-6 py-2 bg-purple-600 text-white font-mono text-xs font-bold rounded hover:bg-purple-500 shadow-lg shadow-purple-600/30">ACQUIRE TITLE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: PROFILE SETTINGS -->
   <div id="profile-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
     <div class="cyber-card bg-slate-900 border border-purple-500/30 p-8 rounded-xl max-w-md w-full relative">
@@ -421,7 +556,7 @@
 
   <!-- COMPLETE JAVASCRIPT LOGIC -->
   <script>
-    // 1. DATA STORES
+    // 1. DATA STORES & LOCAL STORAGE INITIALIZATION
     const games = [
       { id: 1, title: 'VOID PROTOCOL', genre: 'Action RPG', score: 98, price: '$59.99', desc: 'Reality is negotiable · 120FPS · Obsidian Labs' },
       { id: 2, title: 'THERMAL OVERDRIVE', genre: 'Racing', score: 91, price: '$49.99', desc: 'Cooling is a weapon · 240FPS · Circuit Forge' },
@@ -430,13 +565,17 @@
       { id: 5, title: 'OVERCLOCK', genre: 'Sim / Builder', score: 89, price: '$44.99', desc: 'Beyond the spec sheet · 120FPS · Circuit Forge' }
     ];
 
-    let forumPosts = [
+    let defaultPosts = [
       { id: 1, tag: 'Lore', game: 'VOID PROTOCOL', title: 'Void Protocol ending theory — the third shard is a red herring', author: '@Vector_7', replies: 2 },
       { id: 2, tag: 'Builds', game: 'THERMAL OVERDRIVE', title: 'Best 240fps build for Thermal Overdrive?', author: '@ThermoK', replies: 1 },
       { id: 3, tag: 'Strategy', game: 'SILICON DEPTH', title: 'Silicon Depth sector 7 — how do you break the loop?', author: '@TraceWitch', replies: 1 }
     ];
 
-    let currentUsername = 'OPERATOR';
+    // LocalStorage Sync
+    let currentUsername = localStorage.getItem('obsidian_username') || 'OPERATOR';
+    let forumPosts = JSON.parse(localStorage.getItem('obsidian_forum_posts')) || defaultPosts;
+
+    document.getElementById('nav-username').innerText = currentUsername;
 
     // 2. RENDER FUNCTIONS
     function renderGames(filterText = '', genre = 'ALL') {
@@ -456,18 +595,27 @@
 
       filtered.forEach(game => {
         const card = document.createElement('div');
-        card.className = 'cyber-card rounded-lg p-7 reveal active';
+        card.className = 'cyber-card rounded-lg p-7 reveal active cursor-pointer group';
+        card.onclick = (e) => {
+          if(!e.target.closest('button')) openGameDetailModal(game);
+        };
         card.innerHTML = `
           <div class="flex justify-between items-start mb-6">
-            <span class="text-xs font-mono text-slate-500">${game.genre}</span>
+            <span class="text-xs font-mono text-slate-500 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5 text-purple-400 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+              ${game.genre}
+            </span>
             <span class="px-2.5 py-1 bg-purple-500/10 border border-purple-500/30 text-purple-400 font-mono text-xs rounded font-bold">${game.score}</span>
           </div>
-          <h3 class="text-2xl font-bold text-white mb-2 transition group-hover:text-purple-400">${game.title}</h3>
+          <h3 class="text-2xl font-bold text-white mb-2 transition group-hover:text-purple-400 flex items-center gap-2">
+            ${game.title}
+          </h3>
           <p class="text-xs text-slate-400 mb-8 font-mono">${game.desc}</p>
           <div class="flex justify-between items-center pt-5 border-t border-slate-800/80">
             <span class="text-xl font-mono font-bold text-white">${game.price}</span>
-            <button onclick="buyGame('${game.title}')" class="px-4 py-2 bg-purple-600/20 border border-purple-500/40 text-purple-300 hover:bg-purple-600 hover:text-white transition font-mono text-xs rounded">
-              ACQUIRE →
+            <button onclick="buyGame('${game.title}')" class="px-4 py-2 bg-purple-600/20 border border-purple-500/40 text-purple-300 hover:bg-purple-600 hover:text-white transition font-mono text-xs rounded flex items-center gap-1">
+              <span>ACQUIRE</span>
+              <span class="group-hover:translate-x-1 transition-transform">→</span>
             </button>
           </div>
         `;
@@ -492,19 +640,41 @@
           </div>
           <div class="flex items-center gap-5 font-mono text-xs text-slate-500 shrink-0">
             <span class="text-slate-400">${post.author}</span>
-            <button onclick="addReply(this)" class="px-3 py-1 bg-slate-800/80 text-purple-300 rounded border border-slate-700/50 hover:border-purple-500 transition">💬 ${post.replies}</button>
+            <button onclick="addReply(this, ${post.id})" class="px-3 py-1 bg-slate-800/80 text-purple-300 rounded border border-slate-700/50 hover:border-purple-500 transition">💬 ${post.replies}</button>
           </div>
         `;
         container.appendChild(item);
       });
     }
 
-    // 3. ACTION & INTERACTION HANDLERS
+    // 3. EXPANDED GAME DETAIL MODAL
+    const gameModal = document.getElementById('game-modal');
+    function openGameDetailModal(game) {
+      document.getElementById('modal-game-title').innerText = game.title;
+      document.getElementById('modal-game-genre').innerText = game.genre;
+      document.getElementById('modal-game-score').innerText = game.score;
+      document.getElementById('modal-game-desc').innerText = game.desc;
+      document.getElementById('modal-game-price').innerText = game.price;
+      
+      document.getElementById('modal-buy-btn').onclick = () => {
+        buyGame(game.title);
+        gameModal.classList.add('hidden');
+      };
+      gameModal.classList.remove('hidden');
+    }
+    document.getElementById('close-game-modal').onclick = () => gameModal.classList.add('hidden');
+
+    // 4. ACTION HANDLERS & TOASTS
     function buyGame(title) {
       showToast(`ACCESS GRANTED: ${title} acquired into primary library!`);
     }
 
-    function addReply(btn) {
+    function addReply(btn, postId) {
+      let post = forumPosts.find(p => p.id === postId);
+      if(post) {
+        post.replies++;
+        localStorage.setItem('obsidian_forum_posts', JSON.stringify(forumPosts));
+      }
       let count = parseInt(btn.innerText.replace('💬 ', '')) + 1;
       btn.innerText = `💬 ${count}`;
       showToast('REPLY BROADCASTED TO NETWORK');
@@ -523,7 +693,7 @@
       setTimeout(() => toast.remove(), 3500);
     }
 
-    // 4. EVENT LISTENERS
+    // 5. EVENT LISTENERS
     document.getElementById('game-search').addEventListener('input', (e) => {
       renderGames(e.target.value, document.getElementById('genre-filter').value);
     });
@@ -532,7 +702,7 @@
       renderGames(document.getElementById('game-search').value, e.target.value);
     });
 
-    // Profile Modal
+    // Profile Settings Modal
     const profileModal = document.getElementById('profile-modal');
     document.getElementById('profile-btn').onclick = () => {
       document.getElementById('username-input').value = currentUsername;
@@ -543,12 +713,13 @@
     document.getElementById('profile-form').onsubmit = (e) => {
       e.preventDefault();
       currentUsername = document.getElementById('username-input').value;
+      localStorage.setItem('obsidian_username', currentUsername);
       document.getElementById('nav-username').innerText = currentUsername;
       profileModal.classList.add('hidden');
-      showToast('OPERATOR SPECIFICATIONS UPDATED');
+      showToast('OPERATOR SPECIFICATIONS UPDATED & SAVED');
     };
 
-    // Forum Post Modal
+    // Forum Broadcast Modal
     const postModal = document.getElementById('post-modal');
     document.getElementById('open-post-modal').onclick = () => postModal.classList.remove('hidden');
     document.getElementById('close-post-modal').onclick = () => postModal.classList.add('hidden');
@@ -568,32 +739,71 @@
         replies: 0
       });
 
+      localStorage.setItem('obsidian_forum_posts', JSON.stringify(forumPosts));
       renderForum();
       postModal.classList.add('hidden');
       document.getElementById('post-form').reset();
       showToast('SIGNAL TRANSMITTED TO THE GRID');
     };
 
-    // 5. ANIMATED BACKGROUND CANVAS & CLOCKS
+    // 6. REAL-TIME TELEMETRY SIMULATOR
+    function simulateHardwareTelemetry() {
+      const temp = Math.floor(Math.random() * 8) + 52;
+      const fps = Math.floor(Math.random() * 12) + 234;
+      document.getElementById('metric-temp').innerText = `${temp}°C`;
+      document.getElementById('metric-fps').innerText = `${fps} FPS`;
+    }
+    setInterval(simulateHardwareTelemetry, 3000);
+
+    // 7. CONSTELLATION NETWORK CANVAS & WORLD CLOCKS
     const canvas = document.getElementById('bg-canvas');
     const ctx = canvas.getContext('2d');
     function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const particles = Array.from({ length: 40 }, () => ({
-      x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-      size: Math.random() * 1.5 + 0.5, speedY: -Math.random() * 0.4 - 0.1, opacity: Math.random() * 0.5 + 0.2
+    // Particle nodes with connection vectors
+    const particles = Array.from({ length: 45 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      size: Math.random() * 1.8 + 0.5
     }));
 
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.y += p.speedY;
-        if (p.y < 0) p.y = canvas.height;
-        ctx.fillStyle = `rgba(168, 85, 247, ${p.opacity})`;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
-      });
+
+      // Draw particle constellation connections
+      for (let i = 0; i < particles.length; i++) {
+        const p1 = particles[i];
+        p1.x += p1.vx;
+        p1.y += p1.vy;
+
+        if (p1.x < 0 || p1.x > canvas.width) p1.vx *= -1;
+        if (p1.y < 0 || p1.y > canvas.height) p1.vy *= -1;
+
+        ctx.fillStyle = 'rgba(168, 85, 247, 0.6)';
+        ctx.beginPath();
+        ctx.arc(p1.x, p1.y, p1.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 130) {
+            ctx.strokeStyle = `rgba(168, 85, 247, ${0.15 * (1 - dist / 130)})`;
+            ctx.lineWidth = 0.6;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      }
       requestAnimationFrame(animateParticles);
     }
 
@@ -605,7 +815,7 @@
       document.getElementById('london-clock').innerText = format('Europe/London');
     }
 
-    // Scroll Reveal Intersection Observer
+    // Scroll Reveal Observer
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('active');
