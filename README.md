@@ -19,5 +19,5 @@ A high-fidelity, futuristic gaming portal and community hub built with modern fr
 ## 🛠️ Quick Start
 Simply clone the repository and open `index.html` in any modern web browser:
 ```bash
-git clone https://github.com/your-username/obsidian-grid.git
+git clone https://github.com/muddeudd1-sys/obsidian-grid.git
 cd obsidian-grid
